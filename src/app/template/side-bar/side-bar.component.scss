@@ -1,0 +1,16 @@
+mat-drawer {
+    background-color: #3f51b5;
+    height: 100%;
+    width: 175px;
+    padding: 20px;
+}
+
+.container {
+    height: 100vh;
+}
+
+.display {
+    display: flex;
+    flex-direction: column;
+    padding: 25px 10% 0 10%;
+}

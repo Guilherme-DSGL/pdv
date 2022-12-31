@@ -1,0 +1,15 @@
+.list-tile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+mat-icon {
+    margin-right: 14px;
+}
+
+a,
+a:visited {
+    text-decoration: none;
+    color: white;
+}
