@@ -17,7 +17,7 @@ import { DialogComponent } from 'src/app/template/dialog/dialog.component';
 })
 export class ProductsTableComponent {
   products: Product[] = [];
-  displayedColumns: string[] = ['id', 'name', 'brand', 'price', 'purchasePrice', 'stock'];
+  displayedColumns: string[] = ['id', 'name', 'brand', 'price', 'purchasePrice', 'stock', 'actions'];
   dataSource: MatTableDataSource<Product>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;

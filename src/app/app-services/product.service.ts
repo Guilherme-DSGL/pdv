@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Product } from '../products/product';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { ProductDTO } from '../products/productsDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,12 @@ export class ProductService {
   constructor(private http: HttpClient) { }
   private url: string = 'http://localhost:8080/api/products';
   
-  create(client: Product): Observable<Product>{
-    return this.http.post<Product>(this.url, client);
+  create(product: ProductDTO): Observable<Product>{
+    return this.http.post<Product>(this.url, product);
   }
 
-  update(client: Product): Observable<any>{
-      return this.http.put<Product>(`${this.url}/${client.id}`, client);
+  update(product: Product): Observable<any>{
+      return this.http.put<Product>(`${this.url}/${product.id}`, product);
   }
 
   getById(id: number): Observable<Product>{

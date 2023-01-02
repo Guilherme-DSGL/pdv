@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Product, productFromGroupForm, productToGroupForm } from '../product';
+import { Product, productDTOFromGroupForm, productFromGroupForm, productToGroupForm} from '../product';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,7 +31,7 @@ export class ProductsFormComponent {
       price: [0, [Validators.required]],
       purchasePrice: [0, [Validators.required]],
       stock: [0, [Validators.required]],
-      category: [null, [Validators.required]]
+      category: [new Category, [Validators.required]]
     }
   );
   
@@ -70,23 +70,26 @@ export class ProductsFormComponent {
   }
   
   submit(){
-    this.product = productFromGroupForm(this.formProduct);
-    console.log(this.product);
-    (!this.product.id) ? this.create() : this.update();
+    let hasId = this.formProduct.controls['id'].value;
+    (!hasId) ? this.create() : this.update();
   }
 
   create(){
-    this.service.create(this.product).subscribe({
+    let productDTO = productDTOFromGroupForm(this.formProduct);
+    console.log(productDTO);
+    this.service.create(productDTO).subscribe({
       next: response => {
         this._snackBar.open(this.responseMessages.httpResponseMessages(statusNumber.CREATED), 'Fechar', {})
         this.formProduct = productToGroupForm(response, this.formProduct);
+        console.log(this.formProduct);
       },
       error: (response: HttpErrorResponse) =>  this._snackBar.open(this.responseMessages.httpResponseMessages(response.status), 'Fechar', {}),
     });
     this.resetForm();
   }
   update(){
-    this.service.update(this.product).subscribe({
+    let product = productFromGroupForm(this.formProduct);
+    this.service.update(product).subscribe({
      next:  response => {
       this._snackBar.open(this.responseMessages.httpResponseMessages(statusNumber.NO_CONTENT), 'Fechar', {})
      },
