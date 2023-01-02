@@ -3,8 +3,15 @@ import { FormGroup } from "@angular/forms";
 export class Category {
     id!: number;
     name!: string;
+
+    
+    
 }
 
+export function compareCategory(a: Category, b: Category): boolean {
+    if(a.id && b.id) return a.id === b.id;
+    return false;
+ }
 
 export function categoryToGroupForm(category: Category, formCategory: FormGroup): FormGroup {
     formCategory.controls['id'].setValue(category.id);

@@ -11,12 +11,13 @@ export class Product {
     purchasePrice!: number | 0;
     stock!: number | 0;
 
-    compareCategories(a: Category, b: Category): boolean {
-       if(a.id && b.id) return a.id === b.id;
-       return false;
-    }
+   
 }
 
+export function compareProduct(a: Product, b: Product){
+    if(a && b) return a.id === b.id;
+    return false;
+}
 
 export function productToGroupForm(product: Product, formProduct: FormGroup): FormGroup {
     formProduct.controls['id'].setValue(product.id);

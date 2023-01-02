@@ -9,6 +9,9 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
 import { SaleFormComponent } from './sale-form/sale-form.component';
 import { SaleTableComponent } from './sale-table/sale-table.component';
 import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -24,7 +27,10 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatSelectModule,
     MatButtonModule,
-    MatInputModule
+    MatInputModule,
+    MatTableModule,
+    MatIconModule,
+    MatPaginatorModule
   ]
 })
 export class SaleModule { }

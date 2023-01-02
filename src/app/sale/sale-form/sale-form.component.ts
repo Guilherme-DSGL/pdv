@@ -3,12 +3,12 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpResponseMessagesService, statusNumber } from 'src/app/app-services/http-response-messages.service';
-import { Sale, saleFromGroupForm, saleToGroupForm } from '../sale';
+import {  saleDTOFromGroupForm, saleFromGroupForm, saleToGroupForm } from '../sale';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SaleService } from 'src/app/app-services/sale.service';
 import { SaleValidatorMessages } from '../saleValidatorsMessages';
-import { Client } from 'src/app/clients/client';
-import { Product } from 'src/app/products/product';
+import { Client, compareClient} from 'src/app/clients/client';
+import { Product, compareProduct } from 'src/app/products/product';
 import { ClientService } from 'src/app/app-services/client.service';
 import { ProductService } from 'src/app/app-services/product.service';
 
@@ -17,13 +17,13 @@ import { ProductService } from 'src/app/app-services/product.service';
   templateUrl: './sale-form.component.html',
   styleUrls: ['./sale-form.component.scss']
 })
-export class SaleFormComponent {
-  sale: Sale;
+export class SaleFormComponent  {
   clients: Client[] = []; 
   products: Product[] = [];
   saleValidatorMessages: SaleValidatorMessages;
-  saleType = ['12x','11x', '10x', '9x', '8x', '7x', '6x', '5x', '4x', '3x', '2x', '1x',]
-
+  saleType = ['12x','11x', '10x', '9x', '8x', '7x', '6x', '5x', '4x', '3x', '2x', '1x',];
+  compareClient = compareClient;
+  compareProduct = compareProduct;
   
   @ViewChild('f') myNgForm: any;
   
@@ -37,7 +37,7 @@ export class SaleFormComponent {
       saleDate: [new Date(), [Validators.required]],
     }
   );
-  
+ 
   constructor(
     private fob: FormBuilder, 
     private service: SaleService,  
@@ -48,11 +48,11 @@ export class SaleFormComponent {
     private activatedRoute: ActivatedRoute,
     private responseMessages: HttpResponseMessagesService,
     ){
-    this.sale = new Sale();
     this.saleValidatorMessages = new SaleValidatorMessages();
   }
 
- 
+  
+  
   ngOnInit(): void {
     this.formSale.controls['id'].disable();
     let params: any = this.activatedRoute.params
@@ -60,10 +60,12 @@ export class SaleFormComponent {
     this.initializeFields();
     
   }
-
   initializeFields(){
     this.serviceClient.getAll().subscribe(clients => this.clients = clients);
     this.serviceProduct.getAll().subscribe(products => this.products = products);
+    this.formSale.get("product")!.valueChanges.subscribe( product => {
+        this.formSale.controls['salePrice'].setValue(product?.price ?? 0);
+    });
   }
 
   getFieldIsValid(field: FormControl): boolean{
@@ -75,23 +77,26 @@ export class SaleFormComponent {
   }
   
   submit(){
-    this.sale = saleFromGroupForm(this.formSale);
-    console.log(this.sale);
-    (!this.sale.id) ? this.create() : this.update();
+    let hasId = this.formSale.controls['id'].value;
+    (!hasId) ? this.create() : this.update();
   }
 
   create(){
-    this.service.create(this.sale).subscribe({
+    let sale = saleDTOFromGroupForm(this.formSale);
+    this.service.create(sale).subscribe({
       next: response => {
         this._snackBar.open(this.responseMessages.httpResponseMessages(statusNumber.CREATED), 'Fechar', {})
+        console.log(response)
         this.formSale = saleToGroupForm(response, this.formSale);
+        console.log(this.formSale.value)
       },
       error: (response: HttpErrorResponse) =>  this._snackBar.open(this.responseMessages.httpResponseMessages(response.status), 'Fechar', {}),
     });
     this.resetForm();
   }
   update(){
-    this.service.update(this.sale).subscribe({
+    let sale = saleFromGroupForm(this.formSale);
+    this.service.update(sale).subscribe({
      next:  response => {
       this._snackBar.open(this.responseMessages.httpResponseMessages(statusNumber.NO_CONTENT), 'Fechar', {})
      },

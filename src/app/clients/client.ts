@@ -8,6 +8,12 @@ export class Client {
     birthDate?: Date | null;
 }
 
+
+export function compareClient(a: Client, b: Client){
+    if(a && b) return a.id === b.id;
+    return false;
+}
+
 export function clientToGroupForm(client: Client, formClient: FormGroup): FormGroup {
     formClient.controls['id'].setValue(client.id);
     formClient.controls['id'].disable();

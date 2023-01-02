@@ -1,5 +1,5 @@
 <h1 class="title">
-    Cadastro de Produtos</h1>
+    Realizar Venda</h1>
 <form (ngSubmit)="submit()" [formGroup]="formSale" #f="ngForm">
     <div>
         <mat-form-field>
@@ -8,9 +8,9 @@
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Cliente</mat-label>
-            <mat-select required formControlName="client" name="client">
+            <mat-select required formControlName="client" name="client" [compareWith]="compareClient">
                 <mat-option>--</mat-option>
-                <mat-option *ngFor="let client of clients" [value]="client.id">
+                <mat-option *ngFor="let client of clients" [value]="client">
                     {{ client.name }}
                 </mat-option>
             </mat-select>
@@ -18,10 +18,10 @@
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Produto</mat-label>
-            <mat-select required formControlName="product" name="product">
+            <mat-select required formControlName="product" name="product" [compareWith]="compareProduct">
                 <mat-option>--</mat-option>
                 <mat-option *ngFor="let product of products" [value]="product">
-                    {{ product.name }} - {{ product.price}}
+                    {{ product.name }} - {{ product.price | currency:"BRL" }}
                 </mat-option>
             </mat-select>
             <mat-error *ngIf="getFieldIsValid(formSale.controls['product'])">{{saleValidatorMessages.getCategoryMessages(formSale.controls['product'])}}</mat-error>
@@ -31,7 +31,7 @@
     <div>
         <mat-form-field>
             <mat-label>Preco</mat-label>
-            <input matInput type="number" placeholder="Preco" formControlName="salePrice" name="salePrice" required [value]="formSale.controls['product'].value!.price">
+            <input matInput type="number" placeholder="Preco" formControlName="salePrice" name="salePrice" required>
             <mat-error *ngIf="getFieldIsValid(formSale.controls['salePrice'])">{{saleValidatorMessages.getPriceMessages(formSale.controls['salePrice'])}}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="fill">

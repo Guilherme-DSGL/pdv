@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Product, productDTOFromGroupForm, productFromGroupForm, productToGroupForm} from '../product';
+import {  productDTOFromGroupForm, productFromGroupForm, productToGroupForm} from '../product';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,7 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ProductService } from 'src/app/app-services/product.service';
 import { ProductValidatorMessages } from '../productValidatorMessage';
 import { CategoryService } from 'src/app/app-services/category.service';
-import { Category } from 'src/app/category/category';
+import { Category, compareCategory } from 'src/app/category/category';
 
 @Component({
   selector: 'app-products-form',
@@ -16,9 +16,10 @@ import { Category } from 'src/app/category/category';
   styleUrls: ['./products-form.component.scss']
 })
 export class ProductsFormComponent {
-  product: Product;
+  category:  Category = new Category();
   categories: Category[] = [];
   productValidatorMessages: ProductValidatorMessages;
+  compareCategory = compareCategory;
 
   
   @ViewChild('f') myNgForm: any;
@@ -44,7 +45,6 @@ export class ProductsFormComponent {
     private activatedRoute: ActivatedRoute,
     private responseMessages: HttpResponseMessagesService,
     ){
-    this.product = new Product();
     this.productValidatorMessages = new ProductValidatorMessages();
   }
 

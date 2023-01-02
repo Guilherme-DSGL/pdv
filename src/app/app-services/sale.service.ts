@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Sale } from '../sale/sale';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { SaleDTO } from '../sale/saleDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -9,14 +10,14 @@ import { HttpClient } from '@angular/common/http';
 export class SaleService {
 
   constructor(private http: HttpClient) { }
-  private url: string = 'http://localhost:8080/api/products';
+  private url: string = 'http://localhost:8080/api/sales';
   
-  create(client: Sale): Observable<Sale>{
-    return this.http.post<Sale>(this.url, client);
+  create(sale: SaleDTO): Observable<Sale>{
+    return this.http.post<Sale>(this.url, sale);
   }
 
-  update(client: Sale): Observable<any>{
-      return this.http.put<Sale>(`${this.url}/${client.id}`, client);
+  update(sale: Sale): Observable<any>{
+      return this.http.put<Sale>(`${this.url}/${sale.id}`, sale);
   }
 
   getById(id: number): Observable<Sale>{
