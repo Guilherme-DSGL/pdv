@@ -38,7 +38,7 @@
         <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef> Acoes </th>
             <td mat-cell *matCellDef="let row">
-                <button mat-icon-button [routerLink]="'/client-form/'+row.id">
+                <button mat-icon-button [routerLink]="'/pdv/client/form/'+row.id">
                     <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
                 </button>
                 <button mat-icon-button (click)="openDialog(row.id)">
