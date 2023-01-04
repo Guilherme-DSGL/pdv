@@ -1,0 +1,46 @@
+<h1 class="title">
+    Cadastro de Clientes</h1>
+<form (ngSubmit)="submit()" [formGroup]="formClient" #f="ngForm">
+    <div>
+        <mat-form-field>
+            <mat-label>ID</mat-label>
+            <input matInput type="number" formControlName="id" name="id">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Nome</mat-label>
+            <input matInput placeholder="Seu nome" formControlName="name" name="name" requried>
+            <mat-error *ngIf="getFieldIsValid(formClient.controls['name'])">{{clientValidatorMessages.getNameMessages(formClient.controls['name'])}}</mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-label>Senha</mat-label>
+            <input matInput type="password" placeholder="Sua Senha" formControlName="pass" name="pass" required>
+            <mat-error *ngIf="getFieldIsValid(formClient.controls['pass'])">{{clientValidatorMessages.getPassMessages(formClient.controls['pass'])}}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Alocacao</mat-label>
+            <mat-select required formControlName="alocation" name="alocation">
+                <mat-option>--</mat-option>
+                <mat-option *ngFor="let alocation of alocations" [value]="alocation">
+                    {{alocation}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="getFieldIsValid(formClient.controls['alocation'])">{{clientValidatorMessages.getAlocationMessages(formClient.controls['alocation'])}}</mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label>Sua data de Nascimento</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="birthDate" name="birthDate">
+            <mat-hint>DD/MM/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="getFieldIsValid(formClient.controls['birthDate'])">{{clientValidatorMessages.getDataMessages(formClient.controls['birthDate'])}}</mat-error>
+        </mat-form-field>
+    </div>
+    <div class="button">
+        <button mat-raised-button color="primary" [disabled]="formClient.invalid">Enviar</button>
+    </div>
+
+</form>

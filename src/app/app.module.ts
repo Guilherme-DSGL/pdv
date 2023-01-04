@@ -5,31 +5,35 @@ import { AppComponent } from './app.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HomeComponent } from './home/home.component';
-import { TemplateModule } from './template/template.module';
 import {  RouterModule } from '@angular/router';
-import { ClientsModule } from './clients/clients.module';
-import { ProductsModule } from './products/products.module';
-import { CategoryModule } from './category/category.module';
 import { AppRoutingModule } from './app-routing.module';
-import { SaleModule } from './sale/sale.module';
-
+import { LoginComponent } from './login/login.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PdvModule } from './pdv/pdv.module';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    TemplateModule,
     RouterModule,
-    ClientsModule,
-    ProductsModule,
-    CategoryModule,
+    PdvModule,
     HttpClientModule,
     AppRoutingModule,
-    SaleModule
+    MatCardModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [
     HttpClient,

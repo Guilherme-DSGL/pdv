@@ -1,0 +1,26 @@
+.card {
+    width: 500px;
+    position: absolute;
+    margin: 15vh 0 0 65vh;
+    .title-header,
+    .form,
+    .action {
+        margin: auto;
+    }
+    .title {
+        font-size: 1.5rem;
+        margin: 20px;
+    }
+    .form {
+        margin: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+    .action {
+        margin: 20px;
+        padding: 0 16px;
+    }
+    .button {
+        width: 100%;
+    }
+}

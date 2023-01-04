@@ -1,0 +1,24 @@
+<mat-drawer-container color="primary" class="container">
+    <mat-drawer mode="side" [opened]="sidebarService.openSideBar">
+        <app-title-side-bar title="SISTEMA"></app-title-side-bar>
+        <app-list-tile link="/pdv/home"></app-list-tile>
+        <app-list-tile icon="dashboard" text="Dashboard" link="#"></app-list-tile>
+        <app-title-side-bar title="CADASTROS"></app-title-side-bar>
+        <app-list-tile icon="person" text="Clientes" link="/pdv/client/form"></app-list-tile>
+        <app-list-tile icon="restaurant" text="Produtos" link="/pdv/products/form"></app-list-tile>
+        <app-list-tile icon="sell" text="Categorias" link="/pdv/categories/form"></app-list-tile>
+        <app-title-side-bar title="CONSULTAS"></app-title-side-bar>
+        <app-list-tile icon="people" text="Clientes" link="/pdv/client/table"></app-list-tile>
+        <app-list-tile icon="fastfood" text="Produtos" link="/pdv/products/table"></app-list-tile>
+        <app-list-tile icon="bookmarks" text="Categorias" link="/pdv/categories/table"></app-list-tile>
+        <app-title-side-bar title="VENDAS"></app-title-side-bar>
+        <app-list-tile icon="table_view" text="Tabela de Vendas" link="/pdv//sale/table"></app-list-tile>
+        <app-list-tile icon="point_of_sale" text="Venda" link="/pdv/sale/form"></app-list-tile>
+
+    </mat-drawer>
+    <mat-drawer-content>
+        <div class="display">
+            <ng-content></ng-content>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>
