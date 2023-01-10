@@ -31,7 +31,6 @@ export class CategoriesFormComponent {
     private fob: FormBuilder, 
     private service: CategoryService,  
     private _snackBar: MatSnackBar,
-    private router: Router,
     private activatedRoute: ActivatedRoute,
     private responseMessages: HttpResponseMessagesService,
     ){

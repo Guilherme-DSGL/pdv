@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Category } from '../pdv/category/category';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class CategoryService {
   }
 
   update(category: Category): Observable<any>{
-      return this.http.put<Category>(`${this.url}/${category.id}`, category);
+      return this.http.put<Category>(`${this.url}/${category.id}`, category, );
   }
 
   getById(id: number): Observable<Category>{
