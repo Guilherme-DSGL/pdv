@@ -4,7 +4,6 @@ import { AuthService } from '../app-services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { User, userFromGroupForm } from './user';
 import { Router } from '@angular/router';
-import { openDialog } from '../pdv/template/dialog/dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
