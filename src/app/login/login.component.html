@@ -1,25 +1,29 @@
-<mat-card class="card">
-    <mat-card-header class="title-header">
-        <mat-card-title class="title">Login</mat-card-title>
-    </mat-card-header>
+<div class="layout">
+    <mat-card class="card">
+        <form (ngSubmit)="submit()" [formGroup]="formUser" #f="ngForm">
+            <mat-card-header class="title-header">
+                <mat-card-title class="title">Login</mat-card-title>
+            </mat-card-header>
 
-    <mat-card-content class="form">
+            <mat-card-content class="form">
 
-        <mat-form-field appearance="fill">
-            <mat-label>Coloque seu usuário</mat-label>
-            <input matInput placeholder="Ex. Maria" required>
-            <mat-error *ngIf="false"></mat-error>
-        </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Coloque seu usuário</mat-label>
+                    <input matInput placeholder="Ex. Maria" required formControlName="name" name="name">
+                    <mat-error *ngIf="false"></mat-error>
+                </mat-form-field>
 
-        <mat-form-field appearance="fill">
-            <mat-label>Coloque sua senha</mat-label>
-            <input matInput [type]="hidePassword ? 'password' : 'text'">
-            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                <mat-form-field appearance="fill">
+                    <mat-label>Coloque sua senha</mat-label>
+                    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" name="password">
+                    <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
               <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
-        </mat-form-field>
-    </mat-card-content>
-    <mat-card-actions class="action">
-        <button mat-raised-button color="primary" class="button">Entrar</button>
-    </mat-card-actions>
-</mat-card>
+                </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions class="action">
+                <button mat-raised-button color="primary" class="button">Entrar</button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+</div>
