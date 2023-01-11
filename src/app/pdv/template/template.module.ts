@@ -11,9 +11,10 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { ListTileComponent } from './side-bar/list-tile/list-tile.component';
 import { RouterModule } from '@angular/router';
 import { TitleSideBarComponent } from './side-bar/title-side-bar/title-side-bar.component';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DialogComponent } from './dialog/dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { SnackBarComponent } from './snack-bar/snack-bar.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     ListTileComponent,
     TitleSideBarComponent,
     DialogComponent,
+    SnackBarComponent,
   ],
   imports: [
     CommonModule,
@@ -35,7 +37,11 @@ import {MatDialogModule} from '@angular/material/dialog';
     RouterModule
   ],
   providers: [
-  
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {
+      duration: 2500,
+      horizontalPosition: "Left",
+      verticalPosition: "Right"
+    }}
   ],
   exports: [
     NavBarComponent,

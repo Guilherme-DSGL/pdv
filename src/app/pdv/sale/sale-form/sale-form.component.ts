@@ -44,10 +44,8 @@ export class SaleFormComponent  {
     private service: SaleService,  
     private serviceClient: ClientService,
     private serviceProduct: ProductService,
-    private _snackBar: MatSnackBar,
-    private router: Router,
     private activatedRoute: ActivatedRoute,
-    private responseMessages: HttpResponseMessagesService,
+    private httpResponseMessages: HttpResponseMessagesService,
     ){
     this.saleValidatorMessages = new SaleValidatorMessages();
   }
@@ -86,12 +84,12 @@ export class SaleFormComponent  {
     let sale = saleDTOFromGroupForm(this.formSale);
     this.service.create(sale).subscribe({
       next: response => {
-        this._snackBar.open(this.responseMessages.httpResponseMessages(statusNumber.CREATED), 'Fechar', {})
+        this.httpResponseMessages.getSucessResponse(statusNumber.CREATED)
         console.log(response)
         this.formSale = saleToGroupForm(response, this.formSale);
         console.log(this.formSale.value)
       },
-      error: (response: HttpErrorResponse) =>  this._snackBar.open(this.responseMessages.httpResponseMessages(response.status), 'Fechar', {}),
+      error:(error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
     });
     this.resetForm();
   }
@@ -99,11 +97,9 @@ export class SaleFormComponent  {
     let sale = saleFromGroupForm(this.formSale);
     this.service.update(sale).subscribe({
      next:  response => {
-      this._snackBar.open(this.responseMessages.httpResponseMessages(statusNumber.NO_CONTENT), 'Fechar', {})
+      this.httpResponseMessages.getSucessResponse(statusNumber.UPDATED)
      },
-     error: (error: HttpErrorResponse) => {
-      this._snackBar.open(this.responseMessages.httpResponseMessages(error.status), 'Fechar')
-     }
+     error: (error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
     }
     );
   
@@ -111,8 +107,11 @@ export class SaleFormComponent  {
   getById(id: number){
     if(id){ 
     this.service.getById(id).subscribe(
-      (response) => {
-        this.formSale = saleToGroupForm(response, this.formSale)
+      {
+        next:(response) => {
+          this.formSale = saleToGroupForm(response, this.formSale)
+        },
+        error: (error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
       }
     ) 
     }

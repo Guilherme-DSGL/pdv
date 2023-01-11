@@ -7,6 +7,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpResponseMessagesService, statusNumber } from 'src/app/app-services/http-response-messages.service';
+import { SnackBarComponent } from '../../template/snack-bar/snack-bar.component';
+import { AuthService } from 'src/app/app-services/auth.service';
 
 
 
@@ -38,18 +40,20 @@ export class ClientFormComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private responseMessages: HttpResponseMessagesService,
+    private httpResponseMessages: HttpResponseMessagesService,
+    private authService: AuthService,
     ){
     this.client = new Client();
     this.clientValidatorMessages = new ClientValidatorMessages();
     this.alocations = alocations;
+
   }
 
  
   ngOnInit(): void {
-    this.formClient.controls['id'].disable();
     let params: any = this.activatedRoute.params
     this.getById(params.value.id);
+    this.formClient.controls['id'].disable();
   }
 
   getFieldIsValid(field: FormControl): boolean{
@@ -68,20 +72,20 @@ export class ClientFormComponent implements OnInit {
   create(){
     this.service.create(this.client).subscribe({
       next: response => {
-        this._snackBar.open(this.responseMessages.httpResponseMessages(statusNumber.CREATED), 'Fechar', {})
+        this.httpResponseMessages.getSucessResponse(statusNumber.CREATED)
         this.formClient = clientToGroupForm(response, this.formClient);
       },
-      error: (response: HttpErrorResponse) =>  this._snackBar.open(this.responseMessages.httpResponseMessages(response.status), 'Fechar', {}),
+      error: (error: HttpErrorResponse) => this.httpResponseMessages.getErrorResponse(error),
     });
     this.resetForm();
   }
   update(){
     this.service.update(this.client).subscribe({
      next:  response => {
-      this._snackBar.open(this.responseMessages.httpResponseMessages(statusNumber.NO_CONTENT), 'Fechar', {})
+      this.httpResponseMessages.getSucessResponse(statusNumber.UPDATED)
      },
      error: (error: HttpErrorResponse) => {
-      this._snackBar.open(this.responseMessages.httpResponseMessages(error.status), 'Fechar')
+      this.httpResponseMessages.getErrorResponse(error);
      }
     }
     );
@@ -89,10 +93,15 @@ export class ClientFormComponent implements OnInit {
   }
   getById(id: number){
     if(id){ 
-    this.service.getById(id).subscribe(
+    this.service.getById(id).subscribe({
+      next:
       (response) => {
         this.formClient = clientToGroupForm(response, this.formClient)
-      }
+      },
+       error: (error: HttpErrorResponse) => {
+        this.httpResponseMessages.getErrorResponse(error);
+     }
+    }
     ) 
     }
   }

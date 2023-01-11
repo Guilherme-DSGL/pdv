@@ -7,9 +7,9 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const AUTHORIZATION = 'Authorization';
-const BEARER = 'Bearer ';
-const keyAcessToken = 'acess-token';
+export const AUTHORIZATION = 'Authorization';
+export const BEARER = 'Bearer ';
+export const keyAcessToken = 'acess-token';
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
   
@@ -21,6 +21,7 @@ export class TokenInterceptor implements HttpInterceptor {
     if(jsonToken){
      let token = jsonToken.token;
      if(request.url.search('auth') == -1){
+      console.log('fazendo fetch fora do auth')
      request = request.clone(
       {
         setHeaders: {

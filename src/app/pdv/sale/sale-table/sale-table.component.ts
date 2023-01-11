@@ -25,14 +25,17 @@ export class SaleTableComponent {
   constructor(
     private service: SaleService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private httpMessage: HttpResponseMessagesService,
+    private httpResponseMessages: HttpResponseMessagesService,
     ){
     this.dataSource = new MatTableDataSource();
    
   }
   
   ngOnInit(){
+    this.getAllSales();
+  }
+
+  getAllSales(){
     this.service.getAll().subscribe(
       (response) => {
         console.log(response);
@@ -48,7 +51,6 @@ export class SaleTableComponent {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -68,10 +70,10 @@ export class SaleTableComponent {
       if(result){
         this.service.deleteById(id).subscribe({
           next: response => {
-            this.snackBar.open(this.httpMessage.httpResponseMessages(statusNumber.NO_CONTENT), 'Fechar');
+            this.httpResponseMessages.getSucessResponse(statusNumber.DELETED)
             this.dataSource.data = this.sales = this.sales.filter(sale => sale.id != id);
           },
-          error: (response: HttpErrorResponse) => this.snackBar.open(this.httpMessage.httpResponseMessages(response.status), 'Fechar'),
+          error: (error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
         });
       } 
     })

@@ -25,22 +25,27 @@ export class ClientsTableComponent implements OnInit {
     constructor(
       private service: ClientService,
       private dialog: MatDialog,
-      private snackBar: MatSnackBar,
-      private httpMessage: HttpResponseMessagesService,
+      private httpResponseMessages: HttpResponseMessagesService,
       ){
       this.dataSource = new MatTableDataSource();
      
     }
     
     ngOnInit(){
+      this.getAllClients();
+    }
+
+    getAllClients(){
       this.service.getAll().subscribe(
-        (response) => {
-          console.log(response);
-          this.clients = response;
-          this.dataSource.data =  response;
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-      
+        {
+          next:  (response) => {
+            console.log(response);
+            this.clients = response;
+            this.dataSource.data =  response;
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+          },
+          error: (error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
         }
       )
     }
@@ -68,10 +73,10 @@ export class ClientsTableComponent implements OnInit {
         if(result){
           this.service.deleteById(id).subscribe({
             next: response => {
-              this.snackBar.open(this.httpMessage.httpResponseMessages(statusNumber.NO_CONTENT), 'Fechar');
+              this.httpResponseMessages.getSucessResponse(statusNumber.DELETED)
               this.dataSource.data = this.clients = this.clients.filter(client => client.id != id);
             },
-            error: (response: HttpErrorResponse) => this.snackBar.open(this.httpMessage.httpResponseMessages(response.status), 'Fechar'),
+            error:(error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
           });
         } 
       })

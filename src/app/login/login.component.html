@@ -10,19 +10,20 @@
                 <mat-form-field appearance="fill">
                     <mat-label>Coloque seu usuário</mat-label>
                     <input matInput placeholder="Ex. Maria" required formControlName="name" name="name">
-                    <mat-error *ngIf="false"></mat-error>
+                    <mat-error *ngIf="getFieldIsValid(formUser.controls['name'])">{{userMessages.getNameMessages(formUser.controls['name'])}}</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="fill">
                     <mat-label>Coloque sua senha</mat-label>
                     <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" name="password">
                     <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
-              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
+                    <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="getFieldIsValid(formUser.controls['password'])">{{ userMessages.getPasswordMessages(formUser.controls['password'])}}</mat-error>
                 </mat-form-field>
             </mat-card-content>
             <mat-card-actions class="action">
-                <button mat-raised-button color="primary" class="button">Entrar</button>
+                <button mat-raised-button color="primary" class="button" [disabled]="formUser.invalid">Entrar</button>
             </mat-card-actions>
         </form>
     </mat-card>

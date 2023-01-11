@@ -26,23 +26,14 @@ export class CategoriesTableComponent {
     private service: CategoryService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private httpMessage: HttpResponseMessagesService,
+    private httpResponseMessages: HttpResponseMessagesService,
     ){
     this.dataSource = new MatTableDataSource();
    
   }
   
   ngOnInit(){
-    this.service.getAll().subscribe(
-      (response) => {
-        console.log(response);
-        this.categories = response;
-        this.dataSource.data =  response;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-    
-      }
-    )
+    this.getAllCategories();
   }
 
   applyFilter(event: Event) {
@@ -52,6 +43,21 @@ export class CategoriesTableComponent {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  getAllCategories(){
+    this.service.getAll().subscribe( {
+      next: (response) => {
+        console.log(response);
+        this.categories = response;
+        this.dataSource.data =  response;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+    
+      },
+      error: (error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
+    }
+    )
   }
 
   openDialog(id: number): void {
@@ -68,10 +74,10 @@ export class CategoriesTableComponent {
       if(result){
         this.service.deleteById(id).subscribe({
           next: response => {
-            this.snackBar.open(this.httpMessage.httpResponseMessages(statusNumber.NO_CONTENT), 'Fechar');
+            this.httpResponseMessages.getSucessResponse(statusNumber.DELETED)
             this.dataSource.data = this.categories = this.categories.filter(category => category.id != id);
           },
-          error: (response: HttpErrorResponse) => this.snackBar.open(this.httpMessage.httpResponseMessages(response.status), 'Fechar'),
+          error: (error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
         });
       } 
     })

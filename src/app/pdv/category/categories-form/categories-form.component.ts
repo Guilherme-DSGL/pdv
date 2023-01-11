@@ -32,7 +32,7 @@ export class CategoriesFormComponent {
     private service: CategoryService,  
     private _snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
-    private responseMessages: HttpResponseMessagesService,
+    private httpResponseMessages: HttpResponseMessagesService,
     ){
     this.category = new Category();
     this.categoryValidatorMessages = new CategoryValidatorMessages();
@@ -61,21 +61,19 @@ export class CategoriesFormComponent {
   create(){
     this.service.create(this.category).subscribe({
       next: response => {
-        this._snackBar.open(this.responseMessages.httpResponseMessages(statusNumber.CREATED), 'Fechar', {})
+        this.httpResponseMessages.getSucessResponse(statusNumber.CREATED)
         this.formCategory = categoryToGroupForm(response, this.formCategory);
       },
-      error: (response: HttpErrorResponse) =>  this._snackBar.open(this.responseMessages.httpResponseMessages(response.status), 'Fechar', {}),
+      error: (error: HttpErrorResponse) =>   this.httpResponseMessages.getErrorResponse(error),
     });
     this.resetForm();
   }
   update(){
     this.service.update(this.category).subscribe({
      next:  response => {
-      this._snackBar.open(this.responseMessages.httpResponseMessages(statusNumber.NO_CONTENT), 'Fechar', {})
+      this.httpResponseMessages.getSucessResponse(statusNumber.UPDATED)
      },
-     error: (error: HttpErrorResponse) => {
-      this._snackBar.open(this.responseMessages.httpResponseMessages(error.status), 'Fechar')
-     }
+     error: (error: HttpErrorResponse) => this.httpResponseMessages.getErrorResponse(error),
     }
     );
   
@@ -83,8 +81,11 @@ export class CategoriesFormComponent {
   getById(id: number){
     if(id){ 
     this.service.getById(id).subscribe(
-      (response) => {
-        this.formCategory = categoryToGroupForm(response, this.formCategory)
+      {
+        next: (response) => {
+          this.formCategory = categoryToGroupForm(response, this.formCategory)
+        },
+        error: (error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
       }
     ) 
     }

@@ -40,10 +40,8 @@ export class ProductsFormComponent {
     private fob: FormBuilder, 
     private service: ProductService,  
     private categoryService: CategoryService,
-    private _snackBar: MatSnackBar,
-    private router: Router,
     private activatedRoute: ActivatedRoute,
-    private responseMessages: HttpResponseMessagesService,
+    private httpResponseMessages: HttpResponseMessagesService,
     ){
     this.productValidatorMessages = new ProductValidatorMessages();
   }
@@ -58,8 +56,12 @@ export class ProductsFormComponent {
   }
 
   getCategories(){
-    this.categoryService.getAll().subscribe(categories => this.categories = categories)
-  }
+    this.categoryService.getAll().subscribe(
+      {
+        next:  categories => this.categories = categories,
+        error: (error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
+      }
+  )}
 
   getFieldIsValid(field: FormControl): boolean{
     return field.invalid && (field.touched || field.dirty);
@@ -79,11 +81,11 @@ export class ProductsFormComponent {
     console.log(productDTO);
     this.service.create(productDTO).subscribe({
       next: response => {
-        this._snackBar.open(this.responseMessages.httpResponseMessages(statusNumber.CREATED), 'Fechar', {})
+        this.httpResponseMessages.getSucessResponse(statusNumber.CREATED)
         this.formProduct = productToGroupForm(response, this.formProduct);
         console.log(this.formProduct);
       },
-      error: (response: HttpErrorResponse) =>  this._snackBar.open(this.responseMessages.httpResponseMessages(response.status), 'Fechar', {}),
+      error: (error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
     });
     this.resetForm();
   }
@@ -91,11 +93,9 @@ export class ProductsFormComponent {
     let product = productFromGroupForm(this.formProduct);
     this.service.update(product).subscribe({
      next:  response => {
-      this._snackBar.open(this.responseMessages.httpResponseMessages(statusNumber.NO_CONTENT), 'Fechar', {})
+      this.httpResponseMessages.getSucessResponse(statusNumber.UPDATED)
      },
-     error: (error: HttpErrorResponse) => {
-      this._snackBar.open(this.responseMessages.httpResponseMessages(error.status), 'Fechar')
-     }
+     error:  (error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
     }
     );
   
@@ -103,8 +103,11 @@ export class ProductsFormComponent {
   getById(id: number){
     if(id){ 
     this.service.getById(id).subscribe(
-      (response) => {
-        this.formProduct = productToGroupForm(response, this.formProduct)
+      {
+        next: (response) => {
+          this.formProduct = productToGroupForm(response, this.formProduct)
+        },
+        error: (error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
       }
     ) 
     }

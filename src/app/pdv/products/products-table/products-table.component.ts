@@ -9,7 +9,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpResponseMessagesService, statusNumber } from 'src/app/app-services/http-response-messages.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DialogComponent } from 'src/app/pdv/template/dialog/dialog.component';
-
 @Component({
   selector: 'app-products-table',
   templateUrl: './products-table.component.html',
@@ -25,15 +24,19 @@ export class ProductsTableComponent {
   constructor(
     private service: ProductService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private httpMessage: HttpResponseMessagesService,
+    private httpResponseMessages: HttpResponseMessagesService,
     ){
     this.dataSource = new MatTableDataSource();
    
   }
   
   ngOnInit(){
-    this.service.getAll().subscribe(
+    this.getAllProducts();
+  }
+
+  getAllProducts(){
+    this.service.getAll().subscribe({
+      next:
       (response) => {
         console.log(response);
         this.products = response;
@@ -41,10 +44,11 @@ export class ProductsTableComponent {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
     
-      }
+      },
+      error: (error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
+    }
     )
   }
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -68,10 +72,10 @@ export class ProductsTableComponent {
       if(result){
         this.service.deleteById(id).subscribe({
           next: response => {
-            this.snackBar.open(this.httpMessage.httpResponseMessages(statusNumber.NO_CONTENT), 'Fechar');
+            this.httpResponseMessages.getSucessResponse(statusNumber.DELETED)
             this.dataSource.data = this.products = this.products.filter(product => product.id != id);
           },
-          error: (response: HttpErrorResponse) => this.snackBar.open(this.httpMessage.httpResponseMessages(response.status), 'Fechar'),
+          error:(error: HttpErrorResponse) =>  this.httpResponseMessages.getErrorResponse(error),
         });
       } 
     })
