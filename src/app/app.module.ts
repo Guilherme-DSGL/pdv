@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
-import {  RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
 import { MatCardModule } from '@angular/material/card';
@@ -16,6 +16,8 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PdvModule } from './pdv/pdv.module';
 import { TokenInterceptor } from './interceptor/token.interceptor';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,13 +36,14 @@ import { TokenInterceptor } from './interceptor/token.interceptor';
     MatIconModule,
     MatInputModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     HttpClient,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor, 
+      useClass: TokenInterceptor,
       multi: true
     }
   ],
