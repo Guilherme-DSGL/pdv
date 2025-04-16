@@ -9,21 +9,16 @@ import { SnackBarComponent } from '../pdv/template/snack-bar/snack-bar.component
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router, private  _snackBar: MatSnackBar){
+  constructor(private authService: AuthService, private router: Router, private _snackBar: MatSnackBar) {
 
   }
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
-    const authenticate = this.authService.isAuthenticated();
-    console.log(authenticate);
-    if(authenticate){
-      return true;
-    }else{
-      return false;
-    }
+    const isAuthenticated = this.authService.isAuthenticated();
+    if (isAuthenticated) return true;
 
-   
+    this.router.navigate(['/login']);
+    return false;
   }
-  
 }

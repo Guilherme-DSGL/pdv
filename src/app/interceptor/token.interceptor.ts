@@ -17,7 +17,6 @@ export class TokenInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     let jsonToken = JSON.parse(localStorage.getItem(keyAcessToken)!);
-    console.log(jsonToken);
     if (jsonToken) {
       let token = jsonToken.token;
       if (request.url.search('auth') == -1) {

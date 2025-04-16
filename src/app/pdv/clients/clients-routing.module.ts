@@ -6,12 +6,15 @@ import { PdvComponent } from '../pdv.component';
 import { AuthGuard } from 'src/app/guard/auth.guard';
 
 export const routes: Routes = [
-  {path: 'pdv/client', canActivate:[AuthGuard], component: PdvComponent, children:[
-  {path: 'form', component:ClientFormComponent},
-  {path: 'form/:id', component:ClientFormComponent},
-  {path: 'table', component:ClientsTableComponent},
-  {path: '', redirectTo: 'table', pathMatch:'full'}
-  ]}
+  {
+    path: '',
+    canActivate: [AuthGuard], children: [
+      { path: 'form', component: ClientFormComponent },
+      { path: 'form/:id', component: ClientFormComponent },
+      { path: 'table', component: ClientsTableComponent },
+      { path: '', redirectTo: 'table', pathMatch: 'full' }
+    ]
+  }
 
 ];
 

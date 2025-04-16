@@ -5,10 +5,31 @@ import { HomeComponent } from './home/home.component';
 import { AuthGuard } from '../guard/auth.guard';
 
 const routes: Routes = [
-  {path:'pdv', component: PdvComponent, canActivate: [AuthGuard], children:[
-    {path:'', component: HomeComponent},
-    {path:'home', component: HomeComponent},
-  ]}
+  {
+    path: '',
+    component: PdvComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', component: HomeComponent },
+      { path: 'home', component: HomeComponent },
+      {
+        path: 'products',
+        loadChildren: () => import('./products/products.module').then(m => m.ProductsModule)
+      },
+      {
+        path: 'client',
+        loadChildren: () => import('./clients/clients.module').then(m => m.ClientsModule)
+      },
+      {
+        path: 'sale',
+        loadChildren: () => import('./sale/sale.module').then(m => m.SaleModule)
+      },
+      {
+        path: 'category',
+        loadChildren: () => import('./category/category.module').then(m => m.CategoryModule)
+      }
+    ]
+  }
 ];
 
 @NgModule({
